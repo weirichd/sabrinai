@@ -9,6 +9,8 @@ pytest = "*"
 [packages]
 requests = "*"
 beautifulsoup4 = "*"
+tensorflow = "*"
+numpy = "==1.15.1"
 
 [requires]
 python_version = "3.6"
