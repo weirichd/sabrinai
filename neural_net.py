@@ -67,10 +67,6 @@ def load_data(episodes_path='episodes', sequence_length=32):
     return X, y, tkn
 
 
-X, y, tokenizer = load_data()
-vocab_size = len(tokenizer.word_index) + 1
-
-
 def build_mode(vocab_size):
     model = Sequential()
     model.add(Embedding(vocab_size, 128, input_length=32))
@@ -85,36 +81,17 @@ def build_mode(vocab_size):
     return model
 
 
-model = build_mode(vocab_size)
+if __name__ == "__main__":
+    X, y, tokenizer = load_data()
+    vocab_size = len(tokenizer.word_index) + 1
 
+    model = build_mode(vocab_size)
 
-def random_sentence(tkn, sentence_len=25):
-    arr = np.random.randint(0, vocab_size, size=32)
-    result = []
+    callbacks = [LambdaCallback(on_epoch_end=lambda epoch, logs: print('\n', random_sentence(tokenizer, 50), '\n'))]
 
-    for i in range(sentence_len):
-        next_word = model.predict_classes(arr.reshape(1, -1))
-        result.append(next_word)
-        arr = np.insert(arr[1:], 31, next_word, axis=0)
+    model.fit(X[:100000], y[:100000],
+              epochs=32,
+              batch_size=100,
+              callbacks=callbacks)
 
-    sentence = tkn.sequences_to_texts(result)
-    sentence = ' '.join(sentence)
-
-    for c in '.!?(),':
-        sentence = sentence.replace(' ' + c, c)
-
-    sentence = sentence.replace('\n', ' \n ')
-
-    return sentence
-
-
-callbacks = [LambdaCallback(on_epoch_end=lambda epoch, logs: print('\n', random_sentence(tokenizer, 50), '\n'))]
-
-model.fit(X[:100000], y[:100000],
-          epochs=32,
-          batch_size=100,
-          callbacks=callbacks)
-
-model.save('sabrinai_2.hdf5')
-
-print(random_sentence(tokenizer, 1000))
+    model.save('sabrinai_2.hdf5')
