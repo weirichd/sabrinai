@@ -111,7 +111,7 @@ def random_sentence(tkn, sentence_len=25):
 callbacks = [LambdaCallback(on_epoch_end=lambda epoch, logs: print('\n', random_sentence(tokenizer, 50), '\n'))]
 
 model.fit(X[:100000], y[:100000],
-          epochs=32,
+          epochs=300,
           batch_size=100,
           callbacks=callbacks)
 

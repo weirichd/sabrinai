@@ -5,13 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+ipykernel = "*"
 
 [packages]
 requests = "*"
 beautifulsoup4 = "*"
 tensorflow = "*"
-numpy = "==1.15.1"
+numpy = "*"
 keras = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.6"
